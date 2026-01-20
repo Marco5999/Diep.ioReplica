@@ -2,20 +2,24 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-   void Start()
+    void Start()
     {
-        Destroy(gameObject, 5f);  // Destroy after 5 seconds
+        Destroy(gameObject, 5f);  // Backup: Auto-destroy after 5 secs
     }
-void OnCollisionEnter2D(Collision2D collision)
+
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        // Check if the thing we hit has the "Hit" tag
-        if (collision.gameObject.CompareTag("Hit"))
+        // Hit something tagged "Hit"? Destroy IT + bullet!
+      if (collision.gameObject.CompareTag("Hit"))
+    {
+        // Find Health script + hurt it
+        Health hitHealth = collision.gameObject.GetComponent<Health>();
+        if (hitHealth != null)
         {
-            Destroy(gameObject);  // Bullet goes POOF!
-            // Optional: Destroy the hit thing too? Uncomment next line:
-            // Destroy(collision.gameObject);
+            hitHealth.TakeDamage(1);  // Pew! -1 health
         }
+        
+        Destroy(gameObject);  // Bullet always dies on hit
     }
-    // Optional: If it hits something, destroy it
-  
+    }
 }

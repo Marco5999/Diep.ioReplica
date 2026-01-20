@@ -17,12 +17,12 @@ public class PlayerMovement : MonoBehaviour
         // WASD input
         Vector2 moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
 
-        // Rotate BODY to face movement (only if moving)
-        if (moveInput != Vector2.zero)
-        {
-            float bodyAngle = Mathf.Atan2(moveInput.y, moveInput.x) * Mathf.Rad2Deg - 90f;
-            transform.rotation = Quaternion.Euler(0, 0, bodyAngle);
-        }
+        // // Rotate BODY to face movement (only if moving)
+        // if (moveInput != Vector2.zero)
+        // {
+        //     float bodyAngle = Mathf.Atan2(moveInput.y, moveInput.x) * Mathf.Rad2Deg - 90f;
+        //     transform.rotation = Quaternion.Euler(0, 0, bodyAngle);
+        // }
 
         // Save for physics
         movement = moveInput;
