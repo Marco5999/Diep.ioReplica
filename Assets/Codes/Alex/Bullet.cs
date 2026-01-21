@@ -7,19 +7,16 @@ public class Bullet : MonoBehaviour
         Destroy(gameObject, 5f);  // Backup: Auto-destroy after 5 secs
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+   void OnCollisionEnter2D(Collision2D collision)
+{
+    if (collision.gameObject.CompareTag("Hit"))
     {
-        // Hit something tagged "Hit"? Destroy IT + bullet!
-      if (collision.gameObject.CompareTag("Hit"))
-    {
-        // Find Health script + hurt it
-        Health hitHealth = collision.gameObject.GetComponent<Health>();
+        Health hitHealth = collision.gameObject.GetComponent<Health>();  // FIXED!
         if (hitHealth != null)
         {
-            hitHealth.TakeDamage(1);  // Pew! -1 health
+            hitHealth.TakeDamage(1);
         }
-        
-        Destroy(gameObject);  // Bullet always dies on hit
+        Destroy(gameObject);  // Bullet dies
     }
-    }
+}
 }

@@ -2,21 +2,18 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    public int maxHealth = 3;  // Change to 5 for tankier enemies!
+    public int maxHealth = 3;
     private int currentHealth;
 
     void Start()
     {
-        currentHealth = maxHealth;  // Full health at spawn
+        currentHealth = maxHealth;
     }
 
-    public void TakeDamage(int damage = 1)  // Bullet calls this
+    public void TakeDamage(int damage = 1)
     {
         currentHealth -= damage;
-        
-        // Optional: Print health (see in Console)
         Debug.Log(gameObject.name + " hit! Health: " + currentHealth);
-
         if (currentHealth <= 0)
         {
             Die();
@@ -25,6 +22,12 @@ public class Health : MonoBehaviour
 
     void Die()
     {
-        Destroy(gameObject);  // 💥 Gone!
+        int totalPoints = maxHealth * 10;
+        if (PointTracker.Instance != null)
+        {
+            PointTracker.Instance.UpdatePointFill(totalPoints);
+        }
+        Debug.Log(gameObject.name + " DIED! Total Points Earned: +" + totalPoints);
+        Destroy(gameObject);
     }
 }
