@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 6900225462771879359}
   - component: {fileID: -2555681444125793161}
   - component: {fileID: 47053384362909419}
+  - component: {fileID: -5924182674058678160}
   m_Layer: 0
   m_Name: EnemyType1
-  m_TagString: Untagged
+  m_TagString: Hit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -192,3 +193,16 @@ MonoBehaviour:
   rotationSpeed: 1000
   patrolRadius: 3
   changeDirectionTime: 2
+--- !u!114 &-5924182674058678160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8433324672294335819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99b4a2704b2831a40821f9a07ee0186f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Health
+  maxHealth: 1
