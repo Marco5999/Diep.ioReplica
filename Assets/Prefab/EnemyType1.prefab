@@ -183,9 +183,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1af166b5520652a4da7f80197d1d7f57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyChase
-  visionRange: 8
+  visionRange: 5
   wallLayer:
     serializedVersion: 2
     m_Bits: 64
-  moveSpeed: 3
-  rotationSpeed: 200
+  chaseSpeed: 3
+  patrolSpeed: 1.5
+  rotationSpeed: 1000
+  patrolRadius: 3
+  changeDirectionTime: 2
