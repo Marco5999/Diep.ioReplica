@@ -498,6 +498,71 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &700511334
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 47053384362909419, guid: e4c19d1dccf7a0c40be6881f75d6167e, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 842238630}
+    - target: {fileID: 2359824961898885999, guid: e4c19d1dccf7a0c40be6881f75d6167e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -5.47
+      objectReference: {fileID: 0}
+    - target: {fileID: 2359824961898885999, guid: e4c19d1dccf7a0c40be6881f75d6167e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.16
+      objectReference: {fileID: 0}
+    - target: {fileID: 2359824961898885999, guid: e4c19d1dccf7a0c40be6881f75d6167e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2359824961898885999, guid: e4c19d1dccf7a0c40be6881f75d6167e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2359824961898885999, guid: e4c19d1dccf7a0c40be6881f75d6167e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2359824961898885999, guid: e4c19d1dccf7a0c40be6881f75d6167e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2359824961898885999, guid: e4c19d1dccf7a0c40be6881f75d6167e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2359824961898885999, guid: e4c19d1dccf7a0c40be6881f75d6167e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2359824961898885999, guid: e4c19d1dccf7a0c40be6881f75d6167e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2359824961898885999, guid: e4c19d1dccf7a0c40be6881f75d6167e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8433324672294335819, guid: e4c19d1dccf7a0c40be6881f75d6167e, type: 3}
+      propertyPath: m_Name
+      value: EnemyType1 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8511886715816257084, guid: e4c19d1dccf7a0c40be6881f75d6167e, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e4c19d1dccf7a0c40be6881f75d6167e, type: 3}
 --- !u!1 &712943840
 GameObject:
   m_ObjectHideFlags: 0
@@ -717,13 +782,9 @@ MonoBehaviour:
   firePoint: {fileID: 74591383}
   barrel: {fileID: 842238630}
   bulletSpeed: 10
-  launchForce: 15
-  glideDrag: 0.08
-  isGliding: 0
-  barrelLayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  originalDrag: 3
+  fireRate: 15
+  recoilImpulse: 1
+  nextFireTime: 0
 --- !u!58 &842238627
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -877,6 +938,7 @@ MonoBehaviour:
   moveSpeed: 5
   acceleration: 10
   deceleration: 10
+  recoilDeceleration: 12
   cam: {fileID: 53787800}
   cameraSmooth: 0.15
 --- !u!1 &1007013153
@@ -1361,7 +1423,7 @@ Transform:
   m_GameObject: {fileID: 1985534071}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: -5.5, y: 1.75, z: 0}
+  m_LocalPosition: {x: -5.5, y: 1.69, z: 0}
   m_LocalScale: {x: 0.4464, y: 5.993555, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1490,5 +1552,6 @@ SceneRoots:
   - {fileID: 696668333}
   - {fileID: 1007013157}
   - {fileID: 2104662277213452059}
+  - {fileID: 700511334}
   - {fileID: 712943842}
   - {fileID: 1985534073}

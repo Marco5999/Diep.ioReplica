@@ -8,6 +8,7 @@ public class EnemyChase : MonoBehaviour
 
     [Header("Movement")]
     public float moveSpeed = 3f;
+    public float rotationSpeed = 200f; // Degrees per second
 
     Rigidbody2D rb;
     Transform player;
@@ -30,14 +31,14 @@ public class EnemyChase : MonoBehaviour
         Vector2 toPlayer = player.position - transform.position;
         float distance = toPlayer.magnitude;
 
-        // 1. Too far → stop
+        // Stop if player is out of vision
         if (distance > visionRange)
         {
             rb.linearVelocity = Vector2.zero;
             return;
         }
 
-        // 2. Raycast to check wall blocking view
+        // Raycast to check if walls block view
         RaycastHit2D hit = Physics2D.Raycast(
             transform.position,
             toPlayer.normalized,
@@ -45,17 +46,21 @@ public class EnemyChase : MonoBehaviour
             wallLayer
         );
 
-        // Debug vision line
+        // Debug line
         Debug.DrawRay(transform.position, toPlayer, Color.red);
 
-        // If wall hit → stop
         if (hit.collider != null)
         {
             rb.linearVelocity = Vector2.zero;
             return;
         }
 
-        // 3. Chase player
+        // Move toward player
         rb.linearVelocity = toPlayer.normalized * moveSpeed;
+
+        // --- NEW: Rotate to face player ---
+        float targetAngle = Mathf.Atan2(toPlayer.y, toPlayer.x) * Mathf.Rad2Deg - 90f; // -90 if your sprite points up
+        float angle = Mathf.MoveTowardsAngle(rb.rotation, targetAngle, rotationSpeed * Time.fixedDeltaTime);
+        rb.rotation = angle;
     }
 }
