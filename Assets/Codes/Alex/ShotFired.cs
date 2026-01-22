@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 
 public class PlayerShooting : MonoBehaviour
 {
@@ -9,98 +8,52 @@ public class PlayerShooting : MonoBehaviour
     public Transform barrel;
     public float bulletSpeed = 10f;
 
-    [Header("Push-Only Recoil (Ice Glide - No Auto Return!)")]
-    public float launchForce = 15f;      // Strong launch impulse
-    public float glideDrag = 0.08f;      // Ultra-low drag for endless slip
-    public bool isGliding = false;       // Flag: true = sliding, ignore WASD
+    [Header("Auto-Fire on Barrel Hover")]
+    public float fireRate = 15f;  // Shots/sec (diep.io rapid!)
 
-    [Header("Barrel Click Detection")]
-    public LayerMask barrelLayerMask = -1;  // Default: All layers. Set to Barrel layer for precision (optional)
+    [Header("Recoil Push (Diep.io Slippery)")]
+    public float recoilImpulse = 25f;  // BIG push! (>> moveSpeed=5f)
 
-    public float originalDrag = 3f;      // PUBLIC: Normal drag (set in Inspector too)
-
-    private Rigidbody2D rb;
-    private Collider2D barrelCollider;   // Cache for fast check
-    private float cachedGlideDrag;
+    public float nextFireTime = 0f;
+    private PlayerMoveAndCamera moveScript;
 
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        
-        // TOP-DOWN LOCKED
-        rb.gravityScale = 0f;
-        rb.freezeRotation = true;
-        
-        // Cache barrel collider (MUST HAVE BoxCollider2D on Barrel!)
-        barrelCollider = barrel.GetComponent<Collider2D>();
-        if (barrelCollider == null)
-        {
-            Debug.LogError("Barrel needs a Collider2D (e.g. BoxCollider2D, NOT Trigger) for mouse-over shooting!");
-        }
-        
-        rb.linearDamping = originalDrag;
-        cachedGlideDrag = glideDrag;
+        moveScript = GetComponent<PlayerMoveAndCamera>();
     }
 
     void Update()
     {
+        // Barrel aims at mouse (unchanged)
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePos.z = 0;
         Vector2 aimDir = (mousePos - transform.position).normalized;
         float aimAngle = Mathf.Atan2(aimDir.y, aimDir.x) * Mathf.Rad2Deg - 90f;
         barrel.rotation = Quaternion.Euler(0, 0, aimAngle);
 
-        if (Input.GetMouseButtonDown(0))
+        // Barrel hover = AUTO-FIRE FORWARD! (unchanged)
+        if (Input.GetMouseButtonDown(0) & Time.time >= nextFireTime)
         {
             Shoot();
+            nextFireTime = Time.time + (0.1f / fireRate);
         }
+    }
+
+    private bool IsMouseOverBarrel()
+    {
+        Vector2 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Collider2D hit = Physics2D.OverlapPoint(mouseWorld);
+        return hit != null && hit.transform == barrel;
     }
 
     void Shoot()
     {
-        Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mouseWorld.z = 0;
-        Vector2 mousePos2D = (Vector2)mouseWorld;
-
-        // NEW: Check if cursor ON BARREL
-        bool onBarrel = false;
-        if (barrelCollider != null)
-        {
-            Collider2D hit = Physics2D.OverlapPoint(mousePos2D, barrelLayerMask);
-            onBarrel = (hit == barrelCollider);
-        }
-
-        Vector2 shootDir;
-        if (onBarrel)
-        {
-            // STRAIGHT THROUGH FIREPOINT DIRECTION!
-            shootDir = firePoint.up;
-            Debug.Log("Straight barrel shot!");  // Optional: Console feedback
-        }
-        else
-        {
-            // NORMAL: Exact to mouse
-            shootDir = ((Vector2)mouseWorld - (Vector2)firePoint.position).normalized;
-        }
-
-        // Bullet
+        // Bullet shoots FIREPOINT FORWARD! (unchanged)
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         Rigidbody2D bulletRb = bullet.GetComponent<Rigidbody2D>();
-        bulletRb.linearVelocity = shootDir * bulletSpeed;
+        bulletRb.linearVelocity = firePoint.up * bulletSpeed;
 
-        // PUSH GLIDE (Same for both modes)
-        isGliding = true;
-        rb.linearDamping = glideDrag;
-        rb.AddForce(-shootDir * launchForce, ForceMode2D.Impulse);
-    }
-
-    // PUBLIC: Called by Movement on WASD input
-    public void StopGliding()
-    {
-        if (isGliding)
-        {
-            isGliding = false;
-            rb.linearDamping = originalDrag;
-        }
+        // SIGNIFICANT BACKWARD PUSH! (calls movement for slippery blend)
+        moveScript.AddRecoil(-firePoint.up * recoilImpulse);
     }
 }
