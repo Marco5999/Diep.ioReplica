@@ -6,12 +6,18 @@ public class PlayerHealth : MonoBehaviour
     public int maxHealth = 100;
     private int currentHealth;
 
-    [Header("Regen & Invincibility")]
-    public float regenRate = 1f;           // HP per second
-    public float invincibilityTime = 1f;   // Frames after hit
+    [Header("Custom Time-Based Auto-Regen")]
+    public float regenDelay = 3f;              // Seconds before regen starts after damage
+    public float regenPerSecond = 2f;          // HP regenerated per second (control speed!)
+    public float regenRampTime = 1.5f;         // Smooth ramp-up time (0 = instant full speed)
+
+    [Header("Invincibility")]
+    public float invincibilityTime = 1f;       // Seconds invincible after hit
 
     private bool isInvincible = false;
     private float lastDamageTime;
+    private float regenStartTime = -1f;        // When regen can begin
+    private float regenRampProgress = 0f;      // 0-1 for ramp
 
     void Start()
     {
@@ -21,18 +27,28 @@ public class PlayerHealth : MonoBehaviour
 
     void Update()
     {
-        // Slow regen
-        if (!isInvincible && currentHealth < maxHealth)
-        {
-            currentHealth += (int)(regenRate * Time.deltaTime);
-            currentHealth = Mathf.Min(currentHealth, maxHealth);
-            UpdateHealthUI();
-        }
-
         // Invincibility timer
         if (isInvincible && Time.time > lastDamageTime + invincibilityTime)
         {
             isInvincible = false;
+        }
+
+        // Custom Time-Based Regen
+        if (currentHealth < maxHealth && !isInvincible)
+        {
+            // Check if delay passed
+            if (Time.time >= regenStartTime)
+            {
+                // Ramp up regen speed
+                regenRampProgress = Mathf.Clamp01((Time.time - regenStartTime) / regenRampTime);
+                float currentRegenSpeed = regenPerSecond * regenRampProgress;
+
+                // Regen this frame (time-based!)
+                currentHealth += (int)(currentRegenSpeed * Time.deltaTime);
+                currentHealth = Mathf.Min(currentHealth, maxHealth);
+
+                UpdateHealthUI();  // Smooth bar update
+            }
         }
     }
 
@@ -44,9 +60,12 @@ public class PlayerHealth : MonoBehaviour
         lastDamageTime = Time.time;
         isInvincible = true;
 
-        Debug.Log("Player hit! HP: " + currentHealth);
+        // Reset regen timer on new damage
+        regenStartTime = Time.time + regenDelay;
 
-        UpdateHealthUI();
+        Debug.Log("Player hit! HP: " + currentHealth + " | Regen starts in " + regenDelay + "s");
+
+        UpdateHealthUI();  // Show bar!
 
         if (currentHealth <= 0)
         {
@@ -58,9 +77,10 @@ public class PlayerHealth : MonoBehaviour
     {
         transform.position = Vector3.zero;
         currentHealth = maxHealth;
+        regenStartTime = -1f;  // Reset regen
         UpdateHealthUI();
-        isInvincible = true;
-        Debug.Log("Player Died! Respawned.");
+        isInvincible = true;   // Brief god mode
+        Debug.Log("Player Died! Respawned with full HP.");
     }
 
     private void UpdateHealthUI()
