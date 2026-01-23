@@ -13,8 +13,12 @@ public class PointTracker : MonoBehaviour
     [Header("Dynamic Color Gradient")]
     public Gradient fillGradient;  // Assign in Inspector: Red(0) → Yellow(0.5) → Green(1)
 
+    [Header("Animation Settings")]
+    public float sliderSpeed = 50f;  // Points per second
+
     private Image fillImage;       // Cache for fill color changes
     private float currentPoints = 0f;
+    private float targetPoints = 0f;  // Target value for smooth animation
     private float currentMaxPoints = 100f;
     private int currentLevel = 1;
 
@@ -49,22 +53,34 @@ public class PointTracker : MonoBehaviour
         pointSlider.minValue = 0f;
         pointSlider.maxValue = currentMaxPoints;
         pointSlider.value = currentPoints;
-        levelText.text = "Level " + currentLevel;
+        targetPoints = currentPoints;
+        levelText.text = "Lvl " + currentLevel;
         UpdateFillColor();  // Start empty color
+    }
+
+    private void Update()
+    {
+        // Smoothly animate slider towards target
+        if (currentPoints != targetPoints)
+        {
+            float moveAmount = sliderSpeed * Time.deltaTime;
+            currentPoints = Mathf.MoveTowards(currentPoints, targetPoints, moveAmount);
+            pointSlider.value = currentPoints;
+            UpdateFillColor();  // Update color during animation
+
+            // Check for level up when reaching target
+            if (currentPoints >= currentMaxPoints && targetPoints >= currentMaxPoints)
+            {
+                LevelUp();
+            }
+        }
     }
 
     public void UpdatePointFill(int pointsToAdd)
     {
-        currentPoints += pointsToAdd;
-        currentPoints = Mathf.Clamp(currentPoints, 0f, currentMaxPoints);
-        pointSlider.value = currentPoints;
-
-        UpdateFillColor();  // COLOR SHIFT!
-
-        if (currentPoints >= currentMaxPoints)
-        {
-            LevelUp();
-        }
+        targetPoints += pointsToAdd;
+        targetPoints = Mathf.Clamp(targetPoints, 0f, currentMaxPoints);
+        // Slider will smoothly animate to targetPoints in Update()
     }
 
     private void UpdateFillColor()
@@ -76,13 +92,14 @@ public class PointTracker : MonoBehaviour
     private void LevelUp()
     {
         currentPoints = 0f;
+        targetPoints = 0f;
         currentLevel++;
         currentMaxPoints *= 1.5f;
 
         pointSlider.maxValue = currentMaxPoints;
         pointSlider.value = currentPoints;
 
-        levelText.text = "Level " + currentLevel;
+        levelText.text = "Lvl " + currentLevel;
         UpdateFillColor();  // Reset to start color (red/empty)
 
         Debug.Log("LEVEL UP! Level " + currentLevel + " (Max: " + currentMaxPoints + ")");
