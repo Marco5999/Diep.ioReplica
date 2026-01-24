@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 6900225462771879359}
   - component: {fileID: -2555681444125793161}
   - component: {fileID: 47053384362909419}
-  - component: {fileID: -5924182674058678160}
+  - component: {fileID: 840042669117014855}
   - component: {fileID: 5867223747635200038}
   m_Layer: 0
   m_Name: EnemyType1
@@ -286,7 +286,7 @@ MonoBehaviour:
   rotationSpeed: 1000
   patrolRadius: 3
   changeDirectionTime: 2
---- !u!114 &-5924182674058678160
+--- !u!114 &840042669117014855
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -299,6 +299,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
   maxHealth: 3
+  deathScaleMultiplier: 2
+  deathDuration: 0.4
 --- !u!114 &5867223747635200038
 MonoBehaviour:
   m_ObjectHideFlags: 0
