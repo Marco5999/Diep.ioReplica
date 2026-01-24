@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Health : MonoBehaviour
 {
+    [HideInInspector] public EnemySpawner spawner;
+
     [Header("Health")]
     public int maxHealth = 3;
     private int currentHealth;
@@ -52,6 +54,11 @@ public class Health : MonoBehaviour
         Collider2D[] colliders = GetComponentsInChildren<Collider2D>();
         foreach (var col in colliders)
             col.enabled = false;
+
+        if (spawner != null)
+        {
+            spawner.OnEnemyDied();
+        }
 
         StartCoroutine(DeathEffect());
     }
