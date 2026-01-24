@@ -39,26 +39,13 @@ public class Health : MonoBehaviour
 
     void Die()
     {
-        if (isDying) return;
-        isDying = true;
-
-        // Stop physics completely
-        if (rb != null)
+      int totalPoints = maxHealth * 10;
+        if (PointTracker.Instance != null)
         {
-            rb.linearVelocity = Vector2.zero;
-            rb.angularVelocity = 0f;
-            rb.bodyType = RigidbodyType2D.Kinematic;
+            PointTracker.Instance.UpdatePointFill(totalPoints);
         }
-
-        // Disable all colliders
-        Collider2D[] colliders = GetComponentsInChildren<Collider2D>();
-        foreach (var col in colliders)
-            col.enabled = false;
-
-        if (spawner != null)
-        {
-            spawner.OnEnemyDied();
-        }
+        Debug.Log(gameObject.name + " DIED! +" + totalPoints + " points");
+        Destroy(gameObject);
 
         StartCoroutine(DeathEffect());
     }

@@ -106,6 +106,7 @@ GameObject:
   - component: {fileID: 47053384362909419}
   - component: {fileID: 840042669117014855}
   - component: {fileID: 5867223747635200038}
+  - component: {fileID: 7752740887501818835}
   m_Layer: 0
   m_Name: EnemyType1
   m_TagString: Hit
@@ -298,6 +299,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99b4a2704b2831a40821f9a07ee0186f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
+  spawner: {fileID: 0}
   maxHealth: 3
   deathScaleMultiplier: 2
   deathDuration: 0.4
@@ -314,3 +316,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHitFlash
   flashDuration: 0.1
+--- !u!114 &7752740887501818835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8433324672294335819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32e0b4d212a37e742b1e4b03f52c0b21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyContactDamage
+  damageToPlayer: 20
+  damageCooldown: 0.5
