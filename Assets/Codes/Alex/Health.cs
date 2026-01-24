@@ -45,7 +45,7 @@ public class Health : MonoBehaviour
             PointTracker.Instance.UpdatePointFill(totalPoints);
         }
         Debug.Log(gameObject.name + " DIED! +" + totalPoints + " points");
-        //Destroy(gameObject);
+      
 
         StartCoroutine(DeathEffect());
     }
