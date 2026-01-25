@@ -780,7 +780,6 @@ GameObject:
   m_Component:
   - component: {fileID: 182855396}
   - component: {fileID: 182855395}
-  - component: {fileID: 182855397}
   m_Layer: 0
   m_Name: MiniMapCamera
   m_TagString: Untagged
@@ -827,7 +826,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 311
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: 5dd2024a8fc4d7a4da80ed5a887cc2f4, type: 2}
   m_TargetDisplay: 1
@@ -854,20 +853,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &182855397
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 182855394}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2785fbf4870efaa4081c5c9856a2d82b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MiniMapFollow
-  player: {fileID: 676967491}
-  offset: {x: 0, y: 20, z: -0.5}
 --- !u!1 &186672360
 GameObject:
   m_ObjectHideFlags: 0
@@ -1294,7 +1279,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelGenerator
   roomSize: 40
-  wallPrefab: {fileID: 277153510152657712, guid: c85c23fc0150956498c09ed81e5224d8, type: 3}
+  wallPrefab: {fileID: 277153510152657712, guid: 17763fce18cffed4583743ae80dedd38, type: 3}
   outerWallThickness: 2
   innerWallPrefab: {fileID: 277153510152657712, guid: c85c23fc0150956498c09ed81e5224d8, type: 3}
   innerWallCount: 10
@@ -1559,7 +1544,7 @@ GameObject:
   - component: {fileID: 626846750}
   - component: {fileID: 626846749}
   m_Layer: 5
-  m_Name: MiniMap
+  m_Name: MiniMapRenderer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2018,11 +2003,6 @@ SpriteRenderer:
 --- !u!1 &676967483 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1697834530061124951, guid: 577aac9407614a5479092c2bc833cad2, type: 3}
-  m_PrefabInstance: {fileID: 1253169683}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &676967491 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3902390962832563589, guid: 577aac9407614a5479092c2bc833cad2, type: 3}
   m_PrefabInstance: {fileID: 1253169683}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &762700679
@@ -3913,7 +3893,7 @@ PrefabInstance:
       objectReference: {fileID: 932844949}
     - target: {fileID: 8680004615049273063, guid: 577aac9407614a5479092c2bc833cad2, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
