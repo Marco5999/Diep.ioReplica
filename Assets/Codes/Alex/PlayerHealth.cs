@@ -4,7 +4,7 @@ public class PlayerHealth : MonoBehaviour
 {
     [Header("Health Setup")]
     public int maxHealth = 100;
-    private int currentHealth;
+    public int currentHealth;
 
     [Header("Custom Time-Based Auto-Regen")]
     public float regenDelay = 3f;              // Seconds before regen starts after damage
