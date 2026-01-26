@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 public class Health : MonoBehaviour
@@ -15,6 +15,8 @@ public class Health : MonoBehaviour
 
     Rigidbody2D rb;
     SpriteRenderer[] renderers;
+    Collider2D[] colliders;
+
     bool isDying = false;
 
     void Start()
@@ -23,6 +25,7 @@ public class Health : MonoBehaviour
 
         rb = GetComponent<Rigidbody2D>();
         renderers = GetComponentsInChildren<SpriteRenderer>();
+        colliders = GetComponentsInChildren<Collider2D>();
     }
 
     public void TakeDamage(int damage = 1)
@@ -39,15 +42,37 @@ public class Health : MonoBehaviour
 
     void Die()
     {
-      int totalPoints = maxHealth * 10;
+        if (isDying) return;
+        isDying = true;
+
+        // Award points
+        int totalPoints = maxHealth * 10;
         if (PointTracker.Instance != null)
         {
             PointTracker.Instance.UpdatePointFill(totalPoints);
         }
+
         Debug.Log(gameObject.name + " DIED! +" + totalPoints + " points");
-      
+
+        // 🔴 IMPORTANT PART — disable physics & collisions immediately
+        DisablePhysics();
 
         StartCoroutine(DeathEffect());
+    }
+
+    void DisablePhysics()
+    {
+        // Disable all colliders so bullets pass through
+        foreach (Collider2D col in colliders)
+            col.enabled = false;
+
+        // Stop physics movement
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.angularVelocity = 0f;
+            rb.simulated = false;
+        }
     }
 
     IEnumerator DeathEffect()
@@ -66,10 +91,8 @@ public class Health : MonoBehaviour
             t += Time.deltaTime;
             float p = t / deathDuration;
 
-            // Scale up smoothly
             transform.localScale = Vector3.Lerp(startScale, targetScale, p);
 
-            // Fade all sprites (including children)
             for (int i = 0; i < renderers.Length; i++)
             {
                 Color c = renderers[i].color;
