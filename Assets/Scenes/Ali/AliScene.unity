@@ -1282,13 +1282,13 @@ MonoBehaviour:
   wallPrefab: {fileID: 277153510152657712, guid: 17763fce18cffed4583743ae80dedd38, type: 3}
   outerWallThickness: 2
   innerWallPrefab: {fileID: 277153510152657712, guid: c85c23fc0150956498c09ed81e5224d8, type: 3}
-  innerWallCount: 10
-  maxInnerWallSize: {x: 6, y: 6}
+  innerWallCount: 50
+  maxInnerWallSize: {x: 6, y: 8}
   enemySpawnerPrefab: {fileID: 5903050264787451819, guid: 4d533936b2a62364181c24648bb17f8b, type: 3}
-  spawnerCount: 1
+  spawnerCount: 4
   spawnerRadius: 0.5
   player: {fileID: 676967483}
-  playerSafeRadius: 1.5
+  playerSafeRadius: 3
   placementAttempts: 50
 --- !u!4 &362002719
 Transform:
@@ -3894,7 +3894,11 @@ PrefabInstance:
       objectReference: {fileID: 932844949}
     - target: {fileID: 6107018615634781808, guid: 577aac9407614a5479092c2bc833cad2, type: 3}
       propertyPath: recoilDeceleration
-      value: 3
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8095150392690579132, guid: 577aac9407614a5479092c2bc833cad2, type: 3}
+      propertyPath: recoilImpulse
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 8680004615049273063, guid: 577aac9407614a5479092c2bc833cad2, type: 3}
       propertyPath: m_AnchorMax.y
