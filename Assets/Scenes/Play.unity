@@ -2504,6 +2504,63 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &898948531
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 898948533}
+  - component: {fileID: 898948532}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &898948532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 898948531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4f7bf99614843c4896ac8fc6ff5ec82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeManager
+  upgradePoints: 0
+  damageLevel: 0
+  playerSpeedLevel: 0
+  attackSpeedLevel: 0
+  regenerationLevel: 0
+  playerHpLevel: 0
+  damagePerUpgrade: 1
+  playerSpeedPerUpgrade: 1
+  attackSpeedPerUpgrade: 2
+  regenerationPerUpgrade: 0.5
+  playerHpPerUpgrade: 20
+  upgradePopupPrefab: {fileID: 6831664578590783748, guid: e78e5f078c4dc484cb1a501ea6e35dc1, type: 3}
+  upgradeCanvas: {fileID: 8501761330768342728}
+--- !u!4 &898948533
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 898948531}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 10.28204, y: 1.54352, z: 90}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &940376577
 GameObject:
   m_ObjectHideFlags: 0
@@ -3102,9 +3159,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 1213233445
+  m_SortingLayer: 3
+  m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -3643,9 +3700,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 1213233445
+  m_SortingLayer: 3
+  m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -4141,9 +4198,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 1213233445
+  m_SortingLayer: 3
+  m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -4727,7 +4784,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2450729455737758820, guid: b9f3fc26d72d32e48857ba8d8aba8c39, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -960
+      value: -986.5
       objectReference: {fileID: 0}
     - target: {fileID: 2450729455737758820, guid: b9f3fc26d72d32e48857ba8d8aba8c39, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -4744,6 +4801,10 @@ PrefabInstance:
     - target: {fileID: 2450729455737758820, guid: b9f3fc26d72d32e48857ba8d8aba8c39, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3295394990536713496, guid: b9f3fc26d72d32e48857ba8d8aba8c39, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 260
       objectReference: {fileID: 0}
     - target: {fileID: 5434947795466761903, guid: b9f3fc26d72d32e48857ba8d8aba8c39, type: 3}
       propertyPath: m_Name
@@ -5150,3 +5211,4 @@ SceneRoots:
   - {fileID: 189517479}
   - {fileID: 940376578}
   - {fileID: 66337124}
+  - {fileID: 898948533}
