@@ -3892,6 +3892,10 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 932844949}
+    - target: {fileID: 6107018615634781808, guid: 577aac9407614a5479092c2bc833cad2, type: 3}
+      propertyPath: recoilDeceleration
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 8680004615049273063, guid: 577aac9407614a5479092c2bc833cad2, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
