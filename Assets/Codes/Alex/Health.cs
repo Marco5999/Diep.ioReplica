@@ -57,6 +57,14 @@ public class Health : MonoBehaviour
         // 🔴 IMPORTANT PART — disable physics & collisions immediately
         DisablePhysics();
 
+        // --- NEW: Check for SplitterEnemy and call SplitOnDeath ---
+        SplitterEnemy splitter = GetComponent<SplitterEnemy>();
+        if (splitter != null)
+        {
+            splitter.SplitOnDeath();
+        }
+
+        // Start the visual death effect (scale + fade)
         StartCoroutine(DeathEffect());
     }
 
