@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -8,7 +9,7 @@ public class EnemySpawner : MonoBehaviour
     public float spawnInterval = 1f;
     public int maxAliveEnemies = 8;
 
-    int currentAliveEnemies = 0;
+    private List<GameObject> aliveEnemies = new List<GameObject>();
 
     void Start()
     {
@@ -19,7 +20,11 @@ public class EnemySpawner : MonoBehaviour
     {
         while (true)
         {
-            if (currentAliveEnemies < maxAliveEnemies)
+            // Clean up null entries (enemies that were destroyed without notifying)
+            aliveEnemies.RemoveAll(e => e == null);
+
+            // Spawn if under max
+            if (aliveEnemies.Count < maxAliveEnemies)
             {
                 SpawnEnemy();
             }
@@ -39,12 +44,13 @@ public class EnemySpawner : MonoBehaviour
             health.spawner = this;
         }
 
-        currentAliveEnemies++;
+        aliveEnemies.Add(enemy);
     }
 
-    public void OnEnemyDied()
+    // Optional: keep for Health calls if you want
+    public void OnEnemyDied(GameObject enemy)
     {
-        currentAliveEnemies--;
-        currentAliveEnemies = Mathf.Max(0, currentAliveEnemies);
+        if (aliveEnemies.Contains(enemy))
+            aliveEnemies.Remove(enemy);
     }
 }
