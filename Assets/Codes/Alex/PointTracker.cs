@@ -24,10 +24,7 @@ public class PointTracker : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        else
-        {
-            Destroy(gameObject);
-        }
+        else Destroy(gameObject);
     }
 
     private void Start()
@@ -43,11 +40,13 @@ public class PointTracker : MonoBehaviour
 
     private void Update()
     {
-        // Smoothly move slider toward currentPoints every frame
         if (pointSlider != null)
-        {
             pointSlider.value = Mathf.Lerp(pointSlider.value, currentPoints, sliderSmoothSpeed * Time.deltaTime);
-        }
+    }
+
+    public int GetPlayerLevel()
+    {
+        return currentLevel;
     }
 
     public void UpdatePointFill(int pointsToAdd)
@@ -56,25 +55,26 @@ public class PointTracker : MonoBehaviour
         currentPoints = Mathf.Clamp(currentPoints, 0f, currentMaxPoints);
 
         if (currentPoints >= currentMaxPoints)
-        {
             LevelUp();
-        }
     }
 
- private void LevelUp()
-{
-    currentPoints = 0f;
-    currentLevel++;
-    currentMaxPoints *= 1.5f;
-    pointSlider.maxValue = currentMaxPoints;
-    levelText.text = "Level " + currentLevel;
-
-    // This line MUST exist
-    if (UpgradeManager.Instance != null)
+    private void LevelUp()
     {
-        UpgradeManager.Instance.GainUpgradePoint();
-    }
+        currentPoints = 0f;
+        currentLevel++;
+        currentMaxPoints *= 1.5f;
+        pointSlider.maxValue = currentMaxPoints;
+        levelText.text = "Level " + currentLevel;
 
-    Debug.Log($"LEVEL UP to {currentLevel} – called GainUpgradePoint");
-}
+        // Update all enemies in scene
+        Health[] enemies = FindObjectsOfType<Health>();
+        foreach (Health e in enemies)
+            e.ApplyLevelScalingDelta(currentLevel);
+
+        // Upgrade manager call
+        if (UpgradeManager.Instance != null)
+            UpgradeManager.Instance.GainUpgradePoint();
+
+        Debug.Log($"LEVEL UP to {currentLevel} – GainUpgradePoint called, enemies scaled");
+    }
 }

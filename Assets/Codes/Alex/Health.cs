@@ -5,9 +5,12 @@ public class Health : MonoBehaviour
 {
     [HideInInspector] public EnemySpawner spawner;
 
-    [Header("Health")]
-    public int maxHealth = 3;
-    private int currentHealth;
+    [Header("Health Settings")]
+    public float baseMaxHealth = 3f;           // Base HP from inspector
+    public float hpIncreasePerLevel = 1f;      // How much HP increases per player level
+
+    [HideInInspector] public float maxHealth;
+    [HideInInspector] public float currentHealth;
 
     [Header("Death Effect")]
     public float deathScaleMultiplier = 1.4f;
@@ -21,11 +24,31 @@ public class Health : MonoBehaviour
 
     void Start()
     {
-        currentHealth = maxHealth;
-
         rb = GetComponent<Rigidbody2D>();
         renderers = GetComponentsInChildren<SpriteRenderer>();
         colliders = GetComponentsInChildren<Collider2D>();
+
+        // Initialize HP scaled to current player level
+        int playerLevel = PointTracker.Instance != null ? PointTracker.Instance.GetPlayerLevel() : 1;
+        maxHealth = baseMaxHealth + hpIncreasePerLevel * (playerLevel - 1);
+        currentHealth = maxHealth;
+    }
+
+    /// <summary>
+    /// Apply HP increase based on current player level without resetting damage taken
+    /// Call this from PointTracker.LevelUp()
+    /// </summary>
+    /// <param name="playerLevel"></param>
+    public void ApplyLevelScalingDelta(int playerLevel)
+    {
+        float newMaxHealth = baseMaxHealth + hpIncreasePerLevel * (playerLevel - 1);
+        float delta = newMaxHealth - maxHealth;
+
+        if (delta <= 0f) return; // Already at or above scaled HP
+
+        maxHealth += delta;
+        currentHealth += delta;
+        currentHealth = Mathf.Min(currentHealth, maxHealth);
     }
 
     public void TakeDamage(int damage = 1)
@@ -35,9 +58,7 @@ public class Health : MonoBehaviour
         currentHealth -= damage;
 
         if (currentHealth <= 0)
-        {
             Die();
-        }
     }
 
     void Die()
@@ -46,41 +67,28 @@ public class Health : MonoBehaviour
         isDying = true;
 
         // Award points
-        int totalPoints = maxHealth * 10;
+        int totalPoints = Mathf.RoundToInt(maxHealth * 10);
         if (PointTracker.Instance != null)
-        {
             PointTracker.Instance.UpdatePointFill(totalPoints);
-        }
 
-        Debug.Log(gameObject.name + " DIED! +" + totalPoints + " points");
-
-        // 🔴 IMPORTANT PART — disable physics & collisions immediately
-        DisablePhysics();
-
-        // --- NEW: Check for SplitterEnemy and call SplitOnDeath ---
-        SplitterEnemy splitter = GetComponent<SplitterEnemy>();
-        if (splitter != null)
-        {
-            splitter.SplitOnDeath();
-        }
-
-        // Start the visual death effect (scale + fade)
-        StartCoroutine(DeathEffect());
-    }
-
-    void DisablePhysics()
-    {
-        // Disable all colliders so bullets pass through
+        // Disable collisions & physics immediately
         foreach (Collider2D col in colliders)
             col.enabled = false;
 
-        // Stop physics movement
         if (rb != null)
         {
             rb.linearVelocity = Vector2.zero;
             rb.angularVelocity = 0f;
             rb.simulated = false;
         }
+
+        // Splitter enemy special case
+        SplitterEnemy splitter = GetComponent<SplitterEnemy>();
+        if (splitter != null)
+            splitter.SplitOnDeath();
+
+        // Start visual death effect
+        StartCoroutine(DeathEffect());
     }
 
     IEnumerator DeathEffect()

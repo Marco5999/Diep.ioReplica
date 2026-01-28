@@ -1161,7 +1161,7 @@ MonoBehaviour:
   innerWallCount: 10
   maxInnerWallSize: {x: 6, y: 8}
   enemySpawnerPrefab: {fileID: 5903050264787451819, guid: 4d533936b2a62364181c24648bb17f8b, type: 3}
-  spawnerCount: 1
+  spawnerCount: 3
   spawnerRadius: 5
   player: {fileID: 0}
   playerSafeRadius: 3

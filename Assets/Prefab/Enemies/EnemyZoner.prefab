@@ -301,9 +301,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
   spawner: {fileID: 0}
-  maxHealth: 3
+  baseMaxHealth: 2
   deathScaleMultiplier: 1.4
   deathDuration: 0.4
+  hpIncreasePerLevel: 0.5
 --- !u!114 &9182176570895398457
 MonoBehaviour:
   m_ObjectHideFlags: 0
