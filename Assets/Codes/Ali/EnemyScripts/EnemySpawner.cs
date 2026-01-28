@@ -2,10 +2,18 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+[System.Serializable]
+public class EnemyType
+{
+    public GameObject prefab;       // Enemy prefab
+    public float spawnWeight = 1f;  // Higher = more likely to spawn
+    public int maxPerSpawner = 99;  // Max of this type alive at once
+}
+
 public class EnemySpawner : MonoBehaviour
 {
     [Header("Spawner Settings")]
-    public GameObject enemyPrefab;
+    public List<EnemyType> enemyTypes = new List<EnemyType>();
     public float spawnInterval = 1f;
     public int maxAliveEnemies = 8;
 
@@ -20,10 +28,10 @@ public class EnemySpawner : MonoBehaviour
     {
         while (true)
         {
-            // Clean up null entries (enemies that were destroyed without notifying)
+            // Clean up null entries (destroyed enemies)
             aliveEnemies.RemoveAll(e => e == null);
 
-            // Spawn if under max
+            // Spawn if under max alive
             if (aliveEnemies.Count < maxAliveEnemies)
             {
                 SpawnEnemy();
@@ -35,9 +43,14 @@ public class EnemySpawner : MonoBehaviour
 
     void SpawnEnemy()
     {
-        GameObject enemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity);
+        if (enemyTypes.Count == 0) return;
 
-        // Assign spawner reference
+        GameObject chosenPrefab = GetWeightedRandomEnemy();
+        if (chosenPrefab == null) return;
+
+        GameObject enemy = Instantiate(chosenPrefab, transform.position, Quaternion.identity);
+
+        // Assign spawner reference for Health
         Health health = enemy.GetComponent<Health>();
         if (health != null)
         {
@@ -47,7 +60,37 @@ public class EnemySpawner : MonoBehaviour
         aliveEnemies.Add(enemy);
     }
 
-    // Optional: keep for Health calls if you want
+    GameObject GetWeightedRandomEnemy()
+    {
+        float totalWeight = 0f;
+
+        // Compute total weight considering maxPerSpawner
+        foreach (var type in enemyTypes)
+        {
+            int currentCount = aliveEnemies.FindAll(e => e != null && e.name.Contains(type.prefab.name)).Count;
+            if (currentCount < type.maxPerSpawner)
+                totalWeight += type.spawnWeight;
+        }
+
+        if (totalWeight <= 0f) return null;
+
+        float randomValue = Random.Range(0f, totalWeight);
+        float cumulative = 0f;
+
+        foreach (var type in enemyTypes)
+        {
+            int currentCount = aliveEnemies.FindAll(e => e != null && e.name.Contains(type.prefab.name)).Count;
+            if (currentCount >= type.maxPerSpawner) continue;
+
+            cumulative += type.spawnWeight;
+            if (randomValue <= cumulative)
+                return type.prefab;
+        }
+
+        return null;
+    }
+
+    // Called from Health when enemy dies
     public void OnEnemyDied(GameObject enemy)
     {
         if (aliveEnemies.Contains(enemy))
