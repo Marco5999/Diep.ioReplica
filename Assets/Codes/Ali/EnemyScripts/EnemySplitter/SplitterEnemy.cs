@@ -2,21 +2,24 @@ using UnityEngine;
 
 public class SplitterEnemy : MonoBehaviour
 {
+    [Header("Vision & Player")]
+    public float visionRange = 8f;
+    public LayerMask wallLayer;
+    private Transform player;
+
     [Header("Movement")]
     public float chaseSpeed = 3f;
     public float patrolSpeed = 1.5f;
-    public float visionRange = 8f;
     public float rotationSpeed = 200f;
     public float patrolRadius = 5f;
     public float changeDirectionTime = 2f;
-    public LayerMask wallLayer;
 
     [Header("Split Settings")]
-    public GameObject miniPrefab;    // prefab for mini-splitter
-    public int miniCount = 2;        // how many spawn on death
+    public GameObject miniPrefab;    // prefab for mini enemies
+    public int miniCount = 2;        // number of mini enemies on death
     public float miniScale = 0.5f;   // scale of mini enemies
+    
 
-    private Transform player;
     private Rigidbody2D rb;
     private Vector2 patrolCenter;
     private Vector2 patrolDirection;
@@ -25,6 +28,7 @@ public class SplitterEnemy : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+
         GameObject p = GameObject.FindGameObjectWithTag("Player");
         if (p) player = p.transform;
 
@@ -39,9 +43,9 @@ public class SplitterEnemy : MonoBehaviour
         Vector2 toPlayer = (Vector2)player.position - rb.position;
         float distance = toPlayer.magnitude;
 
-        bool playerInSight =
-            distance <= visionRange &&
-            Physics2D.Raycast(rb.position, toPlayer.normalized, distance, wallLayer) == false;
+        // Player in sight and not blocked by wall?
+        bool playerInSight = distance <= visionRange &&
+                             Physics2D.Raycast(rb.position, toPlayer.normalized, distance, wallLayer) == false;
 
         Vector2 velocity;
 
@@ -49,6 +53,9 @@ public class SplitterEnemy : MonoBehaviour
         {
             // --- Chase / Move toward player ---
             velocity = toPlayer.normalized * chaseSpeed;
+
+            // Update patrol center so enemy can resume patrol smoothly
+            patrolCenter = rb.position;
         }
         else
         {
@@ -56,7 +63,6 @@ public class SplitterEnemy : MonoBehaviour
             directionTimer -= Time.fixedDeltaTime;
 
             Vector2 nextPos = rb.position + patrolDirection * patrolSpeed * Time.fixedDeltaTime;
-
             if (directionTimer <= 0f || Vector2.Distance(nextPos, patrolCenter) > patrolRadius)
                 PickNewPatrolDirection();
 
@@ -69,11 +75,16 @@ public class SplitterEnemy : MonoBehaviour
             }
 
             velocity = patrolDirection * patrolSpeed;
+
+            // Stop tiny jitter
+            if (velocity.sqrMagnitude < 0.01f)
+                velocity = Vector2.zero;
         }
 
+        // Apply velocity
         rb.linearVelocity = velocity;
 
-        // Rotate to face movement
+        // Smooth rotation to face movement
         if (velocity.sqrMagnitude > 0.01f)
         {
             float targetAngle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg - 90f;
@@ -88,7 +99,7 @@ public class SplitterEnemy : MonoBehaviour
         directionTimer = changeDirectionTime;
     }
 
-    // Called directly from Health.Die()
+    // Called from Health.Die()
     public void SplitOnDeath()
     {
         if (miniPrefab == null) return;
@@ -97,13 +108,6 @@ public class SplitterEnemy : MonoBehaviour
         {
             GameObject mini = Instantiate(miniPrefab, transform.position, Quaternion.identity);
             mini.transform.localScale = Vector3.one * miniScale;
-
-            Rigidbody2D miniRb = mini.GetComponent<Rigidbody2D>();
-            if (miniRb != null)
-            {
-                Vector2 randomDir = Random.insideUnitCircle.normalized;
-                miniRb.linearVelocity = randomDir * patrolSpeed;
-            }
         }
     }
 }
