@@ -300,7 +300,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
   spawner: {fileID: 0}
-  baseMaxHealth: 3
+  maxHealth: 1
   deathScaleMultiplier: 2
   deathDuration: 0.4
   hpIncreasePerLevel: 1
@@ -329,5 +329,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32e0b4d212a37e742b1e4b03f52c0b21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyContactDamage
-  damageToPlayer: 20
+  damageToPlayer: 10
   damageCooldown: 0.5
+  damageIncreasePerLevel: 3

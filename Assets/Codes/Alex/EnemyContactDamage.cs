@@ -6,6 +6,9 @@ public class EnemyContactDamage : MonoBehaviour
     public int damageToPlayer = 20;
     public float damageCooldown = 0.5f;
 
+    [Header("Damage Scaling per Level")]
+    public int damageIncreasePerLevel = 5;  // Set per enemy type
+
     private float lastDamageTime;
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -21,6 +24,21 @@ public class EnemyContactDamage : MonoBehaviour
                 lastDamageTime = Time.time;
                 Debug.Log("Enemy contact! Player took " + damageToPlayer + " damage.");
             }
+        }
+    }
+
+    // Call this whenever player levels up to scale all existing enemies
+    public void ScaleDamage(int levelsGained)
+    {
+        damageToPlayer += damageIncreasePerLevel * levelsGained;
+    }
+
+    public static void ScaleExistingEnemiesDamage(int levelsGained)
+    {
+        EnemyContactDamage[] allEnemies = Object.FindObjectsByType<EnemyContactDamage>(FindObjectsSortMode.None);
+        foreach (var e in allEnemies)
+        {
+            e.ScaleDamage(levelsGained);
         }
     }
 }

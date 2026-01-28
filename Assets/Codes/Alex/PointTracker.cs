@@ -24,7 +24,10 @@ public class PointTracker : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        else Destroy(gameObject);
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void Start()
@@ -41,7 +44,9 @@ public class PointTracker : MonoBehaviour
     private void Update()
     {
         if (pointSlider != null)
+        {
             pointSlider.value = Mathf.Lerp(pointSlider.value, currentPoints, sliderSmoothSpeed * Time.deltaTime);
+        }
     }
 
     public int GetPlayerLevel()
@@ -55,7 +60,9 @@ public class PointTracker : MonoBehaviour
         currentPoints = Mathf.Clamp(currentPoints, 0f, currentMaxPoints);
 
         if (currentPoints >= currentMaxPoints)
+        {
             LevelUp();
+        }
     }
 
     private void LevelUp()
@@ -66,15 +73,18 @@ public class PointTracker : MonoBehaviour
         pointSlider.maxValue = currentMaxPoints;
         levelText.text = "Level " + currentLevel;
 
-        // Update all enemies in scene
-        Health[] enemies = FindObjectsOfType<Health>();
-        foreach (Health e in enemies)
-            e.ApplyLevelScalingDelta(currentLevel);
+        Debug.Log($"LEVEL UP to {currentLevel}!");
 
-        // Upgrade manager call
+        // Scale all existing enemies' HP
+        Health.ScaleExistingEnemiesHP(1);
+
+        // Scale all existing enemies' contact damage
+        EnemyContactDamage.ScaleExistingEnemiesDamage(1);
+
+        // Give upgrade point
         if (UpgradeManager.Instance != null)
+        {
             UpgradeManager.Instance.GainUpgradePoint();
-
-        Debug.Log($"LEVEL UP to {currentLevel} – GainUpgradePoint called, enemies scaled");
+        }
     }
 }

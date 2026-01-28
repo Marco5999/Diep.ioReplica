@@ -5,16 +5,16 @@ public class Health : MonoBehaviour
 {
     [HideInInspector] public EnemySpawner spawner;
 
-    [Header("Health Settings")]
-    public float baseMaxHealth = 3f;           // Base HP from inspector
-    public float hpIncreasePerLevel = 1f;      // How much HP increases per player level
-
-    [HideInInspector] public float maxHealth;
-    [HideInInspector] public float currentHealth;
+    [Header("Health")]
+    public int maxHealth = 3;              // Inspector starting value
+    private int currentHealth;
 
     [Header("Death Effect")]
     public float deathScaleMultiplier = 1.4f;
     public float deathDuration = 0.4f;
+
+    [Header("HP Scaling per Level")]
+    public float hpIncreasePerLevel = 1f;  // Set per enemy type (Red=1, Splitter=1.5, Zoner=0.5)
 
     Rigidbody2D rb;
     SpriteRenderer[] renderers;
@@ -28,27 +28,16 @@ public class Health : MonoBehaviour
         renderers = GetComponentsInChildren<SpriteRenderer>();
         colliders = GetComponentsInChildren<Collider2D>();
 
-        // Initialize HP scaled to current player level
-        int playerLevel = PointTracker.Instance != null ? PointTracker.Instance.GetPlayerLevel() : 1;
-        maxHealth = baseMaxHealth + hpIncreasePerLevel * (playerLevel - 1);
+        // Apply scaling for current player level
+        if (PointTracker.Instance != null)
+        {
+            int playerLevel = PointTracker.Instance.GetPlayerLevel();
+            if (playerLevel > 1)
+                ScaleHP(playerLevel - 1);
+        }
+
+        // Initialize current health
         currentHealth = maxHealth;
-    }
-
-    /// <summary>
-    /// Apply HP increase based on current player level without resetting damage taken
-    /// Call this from PointTracker.LevelUp()
-    /// </summary>
-    /// <param name="playerLevel"></param>
-    public void ApplyLevelScalingDelta(int playerLevel)
-    {
-        float newMaxHealth = baseMaxHealth + hpIncreasePerLevel * (playerLevel - 1);
-        float delta = newMaxHealth - maxHealth;
-
-        if (delta <= 0f) return; // Already at or above scaled HP
-
-        maxHealth += delta;
-        currentHealth += delta;
-        currentHealth = Mathf.Min(currentHealth, maxHealth);
     }
 
     public void TakeDamage(int damage = 1)
@@ -58,7 +47,9 @@ public class Health : MonoBehaviour
         currentHealth -= damage;
 
         if (currentHealth <= 0)
+        {
             Die();
+        }
     }
 
     void Die()
@@ -67,11 +58,28 @@ public class Health : MonoBehaviour
         isDying = true;
 
         // Award points
-        int totalPoints = Mathf.RoundToInt(maxHealth * 10);
+        int totalPoints = maxHealth * 10;
         if (PointTracker.Instance != null)
+        {
             PointTracker.Instance.UpdatePointFill(totalPoints);
+        }
+
+        Debug.Log(gameObject.name + " DIED! +" + totalPoints + " points");
 
         // Disable collisions & physics immediately
+        DisablePhysics();
+
+        // Splitter special
+        SplitterEnemy splitter = GetComponent<SplitterEnemy>();
+        if (splitter != null)
+            splitter.SplitOnDeath();
+
+        // Start death visual effect
+        StartCoroutine(DeathEffect());
+    }
+
+    void DisablePhysics()
+    {
         foreach (Collider2D col in colliders)
             col.enabled = false;
 
@@ -81,14 +89,6 @@ public class Health : MonoBehaviour
             rb.angularVelocity = 0f;
             rb.simulated = false;
         }
-
-        // Splitter enemy special case
-        SplitterEnemy splitter = GetComponent<SplitterEnemy>();
-        if (splitter != null)
-            splitter.SplitOnDeath();
-
-        // Start visual death effect
-        StartCoroutine(DeathEffect());
     }
 
     IEnumerator DeathEffect()
@@ -120,5 +120,26 @@ public class Health : MonoBehaviour
         }
 
         Destroy(gameObject);
+    }
+
+    // Call this whenever player levels up to scale all existing enemies
+    public void ScaleHP(int levelsGained)
+    {
+        // Increase max health
+        float addedHP = hpIncreasePerLevel * levelsGained;
+        maxHealth += Mathf.RoundToInt(addedHP);
+
+        // Increase current health proportionally (without resetting damage)
+        currentHealth += Mathf.RoundToInt(addedHP);
+    }
+
+    // Static helper to scale all existing enemies when player levels up
+    public static void ScaleExistingEnemiesHP(int levelsGained)
+    {
+        Health[] allEnemies = Object.FindObjectsByType<Health>(FindObjectsSortMode.None);
+        foreach (var e in allEnemies)
+        {
+            e.ScaleHP(levelsGained);
+        }
     }
 }
