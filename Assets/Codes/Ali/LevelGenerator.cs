@@ -21,11 +21,13 @@ public class LevelGenerator : MonoBehaviour
     public float spawnerRadius = 0.5f;
 
     [Header("Player Settings")]
-    public GameObject player;  // assign the existing player here
+    public GameObject player;
     public float playerSafeRadius = 1.5f;
 
     [Header("Placement Settings")]
-    public int placementAttempts = 50; // max tries before giving up
+    public int placementAttempts = 50;
+
+    // shared collision data
     private List<Bounds> usedBounds = new List<Bounds>();
 
     void Start()
@@ -42,44 +44,50 @@ public class LevelGenerator : MonoBehaviour
         float half = roomSize / 2f;
         float offset = outerWallThickness / 2f;
 
-        // Top
         CreateOuterWall(new Vector2(0, half + offset), new Vector2(roomSize + outerWallThickness * 2f, outerWallThickness));
-        // Bottom
         CreateOuterWall(new Vector2(0, -half - offset), new Vector2(roomSize + outerWallThickness * 2f, outerWallThickness));
-        // Left
         CreateOuterWall(new Vector2(-half - offset, 0), new Vector2(outerWallThickness, roomSize));
-        // Right
         CreateOuterWall(new Vector2(half + offset, 0), new Vector2(outerWallThickness, roomSize));
     }
 
-    void CreateOuterWall(Vector2 pos, Vector2 size)
+    void CreateOuterWall(Vector2 localPos, Vector2 size)
     {
-        GameObject wall = Instantiate(wallPrefab, pos, Quaternion.identity);
+        Vector2 worldPos = (Vector2)transform.position + localPos;
+
+        GameObject wall = Instantiate(wallPrefab, worldPos, Quaternion.identity);
         wall.transform.localScale = new Vector3(size.x, size.y, 1f);
-        usedBounds.Add(new Bounds(pos, size));
+
+        usedBounds.Add(new Bounds(worldPos, size));
     }
     #endregion
 
     #region Inner Walls
     void GenerateInnerWalls()
     {
+        float half = roomSize / 2f;
+
         for (int i = 0; i < innerWallCount; i++)
         {
             for (int attempt = 0; attempt < placementAttempts; attempt++)
             {
-                Vector2 size = new Vector2(Random.Range(1f, maxInnerWallSize.x), Random.Range(1f, maxInnerWallSize.y));
-                float half = roomSize / 2f;
-                Vector2 pos = new Vector2(
+                Vector2 size = new Vector2(
+                    Random.Range(1f, maxInnerWallSize.x),
+                    Random.Range(1f, maxInnerWallSize.y)
+                );
+
+                Vector2 localPos = new Vector2(
                     Random.Range(-half + size.x / 2f, half - size.x / 2f),
                     Random.Range(-half + size.y / 2f, half - size.y / 2f)
                 );
 
-                Bounds wallBounds = new Bounds(pos, size);
+                Vector2 worldPos = (Vector2)transform.position + localPos;
+                Bounds wallBounds = new Bounds(worldPos, size);
 
                 if (!IsOverlapping(wallBounds))
                 {
-                    GameObject wall = Instantiate(innerWallPrefab, pos, Quaternion.identity);
+                    GameObject wall = Instantiate(innerWallPrefab, worldPos, Quaternion.identity);
                     wall.transform.localScale = new Vector3(size.x, size.y, 1f);
+
                     usedBounds.Add(wallBounds);
                     break;
                 }
@@ -93,19 +101,21 @@ public class LevelGenerator : MonoBehaviour
     {
         if (player == null) return;
 
+        float half = roomSize / 2f;
+
         for (int attempt = 0; attempt < placementAttempts; attempt++)
         {
-            float half = roomSize / 2f;
-            Vector2 pos = new Vector2(
+            Vector2 localPos = new Vector2(
                 Random.Range(-half, half),
                 Random.Range(-half, half)
             );
 
-            Bounds playerBounds = new Bounds(pos, Vector3.one * playerSafeRadius * 2f);
+            Vector2 worldPos = (Vector2)transform.position + localPos;
+            Bounds playerBounds = new Bounds(worldPos, Vector3.one * playerSafeRadius * 2f);
 
             if (!IsOverlapping(playerBounds))
             {
-                player.transform.position = pos;
+                player.transform.position = worldPos;
                 usedBounds.Add(playerBounds);
                 break;
             }
@@ -116,21 +126,32 @@ public class LevelGenerator : MonoBehaviour
     #region Enemy Spawners
     void GenerateEnemySpawners()
     {
+        float half = roomSize / 2f;
+
         for (int i = 0; i < spawnerCount; i++)
         {
             for (int attempt = 0; attempt < placementAttempts; attempt++)
             {
-                float half = roomSize / 2f;
-                Vector2 pos = new Vector2(
+                Vector2 localPos = new Vector2(
                     Random.Range(-half, half),
                     Random.Range(-half, half)
                 );
 
-                Bounds spawnerBounds = new Bounds(pos, Vector3.one * spawnerRadius * 2f);
+                Vector2 worldPos = (Vector2)transform.position + localPos;
+                Bounds spawnerBounds = new Bounds(worldPos, Vector3.one * spawnerRadius * 2f);
 
                 if (!IsOverlapping(spawnerBounds))
                 {
-                    Instantiate(enemySpawnerPrefab, pos, Quaternion.identity);
+                    GameObject spawner = Instantiate(enemySpawnerPrefab, worldPos, Quaternion.identity);
+
+                    EnemySpawnerRelocator relocator = spawner.GetComponent<EnemySpawnerRelocator>();
+                    if (relocator != null)
+                    {
+                        relocator.spawnerRadius = spawnerRadius;
+                        relocator.placementAttempts = placementAttempts;
+                        relocator.Init(usedBounds, transform, roomSize);
+                    }
+
                     usedBounds.Add(spawnerBounds);
                     break;
                 }

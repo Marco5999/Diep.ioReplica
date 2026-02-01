@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2921481817612250534}
   - component: {fileID: 804202180560174198}
+  - component: {fileID: 9193521651217257662}
   m_Layer: 0
   m_Name: EnemySpawner
   m_TagString: Untagged
@@ -48,19 +49,36 @@ MonoBehaviour:
   - prefab: {fileID: 8433324672294335819, guid: e4c19d1dccf7a0c40be6881f75d6167e, type: 3}
     spawnWeight: 50
     baseMaxPerSpawner: 8
-    increasePerStep: 1
+    increaseMaxAlivePerThisType: 1
     runtimeMaxPerSpawner: 0
   - prefab: {fileID: 5592451915071506004, guid: cc331314c967bbd4fb2750335a7bd9b9, type: 3}
     spawnWeight: 20
     baseMaxPerSpawner: 3
-    increasePerStep: 1
+    increaseMaxAlivePerThisType: 1
     runtimeMaxPerSpawner: 0
   - prefab: {fileID: 5129322938643211101, guid: 17930416faa96294cbcd69a1cef4bbf7, type: 3}
     spawnWeight: 30
     baseMaxPerSpawner: 2
-    increasePerStep: 1
+    increaseMaxAlivePerThisType: 1
     runtimeMaxPerSpawner: 0
   spawnInterval: 1
   baseMaxAliveEnemies: 8
   levelsPerIncrease: 3
-  totalIncreasePerStep: 1
+  increaseMaxAliveEnemies: 1
+--- !u!114 &9193521651217257662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5903050264787451819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84633c3add371074581094c6b6399a57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnerRelocator
+  relocationInterval: 5
+  spawnerRadius: 0.5
+  placementAttempts: 50
+  levelCenter: {fileID: 0}
+  roomSize: 20
