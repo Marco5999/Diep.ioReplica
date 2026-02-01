@@ -77,8 +77,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84633c3add371074581094c6b6399a57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnerRelocator
-  relocationInterval: 5
-  spawnerRadius: 0.5
-  placementAttempts: 50
+  relocationInterval: 3
+  spawnerRadius: 1
+  placementAttempts: 150
   levelCenter: {fileID: 0}
   roomSize: 20
