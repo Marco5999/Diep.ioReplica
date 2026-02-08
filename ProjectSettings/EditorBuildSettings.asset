@@ -4,6 +4,12 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: c07ca7f5233211047a746830e96d92b5
+  - enabled: 1
+    path: Assets/Scenes/Ali/AliScene.unity
+    guid: b89973555d4ed84438c8a92eebe0e78a
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

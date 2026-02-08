@@ -24,6 +24,8 @@ public class PlayerShooting : MonoBehaviour
 
     void Update()
     {
+        if (PauseMenu.IsPaused) return;
+
         // Barrel aims at mouse (unchanged)
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePos.z = 0;
