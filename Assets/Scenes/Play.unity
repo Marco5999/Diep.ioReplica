@@ -148,9 +148,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a7acb5147a20704ba6a853f66a6e09a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
-  enemyPrefab: {fileID: 8433324672294335819, guid: e4c19d1dccf7a0c40be6881f75d6167e, type: 3}
+  enemyTypes: []
   spawnInterval: 1
-  maxAliveEnemies: 8
+  baseMaxAliveEnemies: 8
+  levelsPerIncrease: 3
+  increaseMaxAliveEnemies: 1
 --- !u!4 &66337124
 Transform:
   m_ObjectHideFlags: 0
@@ -502,8 +504,8 @@ MonoBehaviour:
   playerHpLevel: 0
   damagePerUpgrade: 1
   playerSpeedPerUpgrade: 1
-  attackSpeedPerUpgrade: 2
-  regenerationPerUpgrade: 0.5
+  attackSpeedPerUpgrade: 0.2
+  regenerationPerUpgrade: 5
   playerHpPerUpgrade: 20
   upgradePopupPrefab: {fileID: 3207359014728405110, guid: 5baf89e87dbf5df41b81acedfbf3c3c2, type: 3}
   upgradeCanvas: {fileID: 8501761330768342728}
@@ -867,7 +869,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3902390962832563589, guid: 577aac9407614a5479092c2bc833cad2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.77
+      value: 13.5
       objectReference: {fileID: 0}
     - target: {fileID: 3902390962832563589, guid: 577aac9407614a5479092c2bc833cad2, type: 3}
       propertyPath: m_LocalPosition.z
