@@ -254,10 +254,10 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1739530679
   m_SortingLayer: 1
-  m_SortingOrder: 1
+  m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0.11617417, g: 0.38237435, b: 0.41509432, a: 0.49019608}
+  m_Color: {r: 0.44025147, g: 0.44025147, b: 0.44025147, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -345,8 +345,8 @@ MonoBehaviour:
   firePoint: {fileID: 1082320927968268486}
   barrel: {fileID: 3902390962832563589}
   bulletSpeed: 10
-  fireRate: 1
-  recoilImpulse: 0.3
+  fireRate: 0.2
+  recoilImpulse: 0.2
   nextFireTime: 0
 --- !u!114 &6107018615634781808
 MonoBehaviour:
@@ -379,6 +379,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   maxHealth: 100
+  currentHealth: 0
   regenDelay: 1
   regenPerSecond: 40
   regenRampTime: 1
@@ -480,7 +481,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.22012573, g: 0.08747187, b: 0, a: 1}
+  m_Color: {r: 0.44654083, g: 0.44227803, b: 0.43951973, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -730,8 +731,8 @@ RectTransform:
   m_GameObject: {fileID: 7701457311576621656}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.01, y: 0.10000001, z: 0.10000001}
-  m_ConstrainProportionsScale: 1
+  m_LocalScale: {x: 0.01, y: 0.1, z: 0.1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 496877826377856466}
   - {fileID: 1527368444600351896}
@@ -819,6 +820,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HealthUIManager
   healthSlider: {fileID: 9081631931910702185}
   healthText: {fileID: 3880086477075452808}
+  positionOffset: {x: 0, y: -1.2, z: 0}
   showDuration: 1
   fadeSpeed: 4
   pulseSpeed: 2
@@ -889,7 +891,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.13, y: -18}
+  m_AnchoredPosition: {x: 0.13000488, y: 5}
   m_SizeDelta: {x: 120, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &9081631931910702185
