@@ -34,7 +34,7 @@ public class PlayerShooting : MonoBehaviour
         barrel.rotation = Quaternion.Euler(0, 0, aimAngle);
 
         // Barrel hover = AUTO-FIRE FORWARD! (unchanged)
-        if (Input.GetMouseButtonDown(0) & Time.time >= nextFireTime)
+        if (Input.GetMouseButtonDown(0) & Time.time >= nextFireTime || Input .GetMouseButton(0) & Time.time >= nextFireTime)
         {
             Shoot();
             nextFireTime = Time.time + (0.1f / fireRate);

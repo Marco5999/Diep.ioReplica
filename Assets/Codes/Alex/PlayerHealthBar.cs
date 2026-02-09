@@ -9,12 +9,16 @@ public class PlayerHealthBar : MonoBehaviour
     public Slider healthSlider;
     public TextMeshProUGUI healthText;
 
+    [Header("Position Offset (Below Player)")]
+    public Vector3 positionOffset = new Vector3(0f, -1.2f, 0f);  // Tweak Y for perfect spot
+
     [Header("Show on Damage")]
-    public float showDuration = 2f;      // Show for 2s after damage
-    public float fadeSpeed = 8f;         // Smooth fade in/out
-    public float pulseSpeed = 4f;        // Pulse animation while shown
+    public float showDuration = 2f;
+    public float fadeSpeed = 8f;
+    public float pulseSpeed = 4f;
 
     private Canvas canvas;
+    private Transform playerTransform;  // Reference to parent Player
     private float targetHealth = 100f;
     private float displayHealth = 100f;
     private bool isShown = false;
@@ -22,14 +26,35 @@ public class PlayerHealthBar : MonoBehaviour
     void Awake()
     {
         canvas = GetComponent<Canvas>();
-        canvas.enabled = false;  // Hidden start
-        gameObject.SetActive(true);  // Active but invisible
+        canvas.enabled = false;  // Hidden by default
+    }
+
+    void Start()
+    {
+        // Cache Player transform (parent)
+        playerTransform = transform.parent;
+        if (playerTransform == null)
+        {
+            Debug.LogError("HealthBarCanvas must be child of Player!");
+        }
+    }
+
+    void LateUpdate()
+    {
+        // FOLLOW PLAYER POSITION ONLY (no rotation!)
+        if (playerTransform != null)
+        {
+            transform.position = playerTransform.position + positionOffset;
+        }
+
+        // FORCE NO ROTATION – always upright!
+        transform.rotation = Quaternion.identity;
     }
 
     void Update()
     {
-        // SMOOTH FILL LERP (always)
-        if (healthSlider)
+        // SMOOTH FILL LERP
+        if (healthSlider != null)
         {
             displayHealth = Mathf.Lerp(displayHealth, targetHealth, fadeSpeed * Time.deltaTime);
             healthSlider.value = displayHealth;
@@ -39,19 +64,18 @@ public class PlayerHealthBar : MonoBehaviour
     public void UpdateHealth(float current, float max)
     {
         targetHealth = current;
-        healthSlider.maxValue = max;
+        if (healthSlider != null) healthSlider.maxValue = max;
 
-        if (healthText)
+        if (healthText != null)
         {
             healthText.text = Mathf.RoundToInt(current) + " / " + Mathf.RoundToInt(max);
         }
 
-        // SHOW ON DAMAGE!
+        // SHOW BAR ON DAMAGE
         if (!isShown)
         {
             ShowBar();
         }
-        // Reset timer if damaged again
         StopAllCoroutines();
         StartCoroutine(HideAfterDuration());
     }
@@ -67,14 +91,15 @@ public class PlayerHealthBar : MonoBehaviour
     {
         yield return new WaitForSeconds(showDuration);
 
-        // FADE OUT
+        // FADE OUT SMOOTH
+        CanvasGroup cg = canvas.GetComponent<CanvasGroup>();
+        if (cg == null) cg = canvas.gameObject.AddComponent<CanvasGroup>();
+
         float timer = 0f;
-        float startAlpha = canvas.GetComponent<CanvasGroup>() ? canvas.GetComponent<CanvasGroup>().alpha : 1f;
         while (timer < 1f)
         {
             timer += Time.deltaTime * fadeSpeed;
-            if (canvas.GetComponent<CanvasGroup>())
-                canvas.GetComponent<CanvasGroup>().alpha = Mathf.Lerp(1f, 0f, timer);
+            cg.alpha = Mathf.Lerp(1f, 0f, timer);
             yield return null;
         }
 
@@ -89,7 +114,7 @@ public class PlayerHealthBar : MonoBehaviour
 
         while (isShown)
         {
-            float pulse = Mathf.Sin(Time.time * pulseSpeed) * 0.1f + 0.9f;  // Subtle pulse
+            float pulse = Mathf.Sin(Time.time * pulseSpeed) * 0.1f + 0.9f;
             cg.alpha = Mathf.Lerp(0.7f, 1f, pulse);
             yield return null;
         }

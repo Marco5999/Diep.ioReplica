@@ -83,7 +83,7 @@ public class PlayerHealth : MonoBehaviour
         Debug.Log("Player Died! Respawned with full HP.");
     }
 
-    private void UpdateHealthUI()
+    public void UpdateHealthUI()
     {
         PlayerHealthBar healthBar = GetComponentInChildren<PlayerHealthBar>();
         if (healthBar != null)
