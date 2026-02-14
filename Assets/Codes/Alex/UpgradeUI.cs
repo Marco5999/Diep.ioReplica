@@ -59,7 +59,7 @@ public class UpgradeUI : MonoBehaviour
     public void RefreshUI()
     {
         if (damageText) damageText.text = $"Damage\nLv. {UpgradeManager.Instance.GetLevel(UpgradeType.Damage)}";
-        if (speedText)  speedText.text  = $"Speed\nLv. {UpgradeManager.Instance.GetLevel(UpgradeType.PlayerSpeed)}";
+        if (speedText)  speedText.text  = $"MoveSpeed\nLv. {UpgradeManager.Instance.GetLevel(UpgradeType.PlayerSpeed)}";
         if (attackText) attackText.text = $"Attack Speed\nLv. {UpgradeManager.Instance.GetLevel(UpgradeType.AttackSpeed)}";
         if (regenText)  regenText.text  = $"Regen\nLv. {UpgradeManager.Instance.GetLevel(UpgradeType.Regeneration)}";
         if (hpText)     hpText.text     = $"HP\nLv. {UpgradeManager.Instance.GetLevel(UpgradeType.PlayerHp)}";
