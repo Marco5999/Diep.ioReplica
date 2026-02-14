@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -74,13 +75,11 @@ public class PlayerHealth : MonoBehaviour
 
     void Die()
     {
-        transform.position = Vector3.zero;
-        currentHealth = maxHealth;
-        healthFloat = maxHealth;
-        regenStartTime = -1f;  // Reset regen
-        isInvincible = true;   // Brief god mode
-        UpdateHealthUI();
-        Debug.Log("Player Died! Respawned with full HP.");
+        Debug.Log("Player Died! Restarting scene...");
+
+        // Reload the current active scene
+        Scene currentScene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(currentScene.buildIndex);
     }
 
     public void UpdateHealthUI()
