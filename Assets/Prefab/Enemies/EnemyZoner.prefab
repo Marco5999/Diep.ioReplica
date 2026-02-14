@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2488446519797374980}
   - component: {fileID: 6639793986803864631}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -344,7 +344,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8716807015743908680}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FirePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -376,7 +376,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9142071855404971307}
   - component: {fileID: 5483216440342263250}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: GunPart1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -467,7 +467,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6434947935420084993}
   - component: {fileID: 7375346989313966111}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: GunPart2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
