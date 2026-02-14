@@ -60,16 +60,17 @@ public class EnemySpawner : MonoBehaviour
         lastAppliedStep = currentStep;
 
         // Scale total enemies
-        runtimeMaxAliveEnemies =
-            baseMaxAliveEnemies + (currentStep * increaseMaxAliveEnemies);
+        runtimeMaxAliveEnemies = baseMaxAliveEnemies + (currentStep * increaseMaxAliveEnemies);
 
         // Scale each enemy type
         foreach (var type in enemyTypes)
         {
-            type.runtimeMaxPerSpawner =
-                type.baseMaxPerSpawner +
-                (currentStep * type.increaseMaxAlivePerThisType);
+            type.runtimeMaxPerSpawner = type.baseMaxPerSpawner + (currentStep * type.increaseMaxAlivePerThisType);
         }
+
+        // Apply scaling to existing enemies immediately
+        Health.ScaleExistingEnemiesHP(currentStep * 1); // Multiply by 1 level per step
+        EnemyContactDamage.ScaleExistingEnemiesDamage(currentStep * 1);
     }
 
     IEnumerator SpawnLoop()

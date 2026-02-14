@@ -27,12 +27,13 @@ public class EnemyContactDamage : MonoBehaviour
         }
     }
 
-    // Call this whenever player levels up to scale all existing enemies
+    // Called for a single enemy when player levels up
     public void ScaleDamage(int levelsGained)
     {
         damageToPlayer += damageIncreasePerLevel * levelsGained;
     }
 
+    // --- STATIC HELPER ---
     public static void ScaleExistingEnemiesDamage(int levelsGained)
     {
         EnemyContactDamage[] allEnemies = Object.FindObjectsByType<EnemyContactDamage>(FindObjectsSortMode.None);

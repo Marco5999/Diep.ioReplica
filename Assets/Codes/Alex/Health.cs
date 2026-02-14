@@ -122,18 +122,15 @@ public class Health : MonoBehaviour
         Destroy(gameObject);
     }
 
-    // Call this whenever player levels up to scale all existing enemies
+    // Called for a single enemy when player levels up
     public void ScaleHP(int levelsGained)
     {
-        // Increase max health
         float addedHP = hpIncreasePerLevel * levelsGained;
         maxHealth += Mathf.RoundToInt(addedHP);
-
-        // Increase current health proportionally (without resetting damage)
-        currentHealth += Mathf.RoundToInt(addedHP);
+        currentHealth += Mathf.RoundToInt(addedHP); // Keep damage done, just add the delta
     }
 
-    // Static helper to scale all existing enemies when player levels up
+    // --- STATIC HELPERS ---
     public static void ScaleExistingEnemiesHP(int levelsGained)
     {
         Health[] allEnemies = Object.FindObjectsByType<Health>(FindObjectsSortMode.None);

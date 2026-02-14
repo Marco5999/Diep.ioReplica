@@ -950,9 +950,17 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 962001725}
+    - target: {fileID: 6107018615634781808, guid: 577aac9407614a5479092c2bc833cad2, type: 3}
+      propertyPath: moveSpeed
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6107018615634781808, guid: 577aac9407614a5479092c2bc833cad2, type: 3}
+      propertyPath: recoilDeceleration
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 8095150392690579132, guid: 577aac9407614a5479092c2bc833cad2, type: 3}
       propertyPath: fireRate
-      value: 5
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 8095150392690579132, guid: 577aac9407614a5479092c2bc833cad2, type: 3}
       propertyPath: recoilImpulse
