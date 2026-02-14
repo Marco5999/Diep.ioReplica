@@ -93,9 +93,28 @@ public class EnemySpawner : MonoBehaviour
 
         GameObject enemy = Instantiate(prefab, transform.position, Quaternion.identity);
 
+        // Apply Health scaling
         Health health = enemy.GetComponent<Health>();
         if (health != null)
+        {
             health.spawner = this;
+
+            if (PointTracker.Instance != null)
+            {
+                int playerLevel = PointTracker.Instance.GetPlayerLevel();
+                if (playerLevel > 1)
+                    health.ScaleHP(playerLevel - 1); // Apply all scaling up to current level
+            }
+        }
+
+        // Apply Damage scaling
+        EnemyContactDamage damageComp = enemy.GetComponent<EnemyContactDamage>();
+        if (damageComp != null && PointTracker.Instance != null)
+        {
+            int playerLevel = PointTracker.Instance.GetPlayerLevel();
+            if (playerLevel > 1)
+                damageComp.ScaleDamage(playerLevel - 1); // Apply all scaling up to current level
+        }
 
         aliveEnemies.Add(enemy);
     }
